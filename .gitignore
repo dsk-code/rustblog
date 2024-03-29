@@ -1,0 +1,3 @@
+Secrets*.toml
+.env
+.DS_Store
