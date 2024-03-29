@@ -1,0 +1,7 @@
+
+[config]
+default_to_workspace = false
+
+[tasks.sqlx-cli]
+command = "cargo"
+args = ["install", "sqlx-cli", "--no-default-features", "--features", "native-tls,postgres"]
