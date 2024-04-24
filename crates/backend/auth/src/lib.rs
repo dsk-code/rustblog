@@ -1,11 +1,153 @@
-use serde::{Serialize, Deserialize};
-use jsonwebtoken::{encode, decode, Header, Algorithm, Validation, EncodingKey, DecodingKey};
+pub mod error;
+use  error::AuthError as Error;
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Claims {
-    sub: String,
-    company: String,
-    exp: usize,
+use jsonwebtoken::{
+    decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation
+};
+use serde::{Serialize, Deserialize};
+use uuid::Uuid;
+use chrono::{Duration, Utc, DateTime};
+use std::sync::OnceLock;
+
+static KEYS: OnceLock<KeySet> = OnceLock::new();
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
+pub struct JWT(String);
+
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub struct Claims {
+    iss: String, // issuer (JWTの発行者)
+    sub: Uuid, // subject (ユーザーの識別子)
+    aud: String, // audience (JWTの受信者)
+    exp: i64, // expiration time (有効期限)
+    iat: i64, // Issued At (発行日時)
+    jti: Uuid, // JWT ID (JWTの一意な識別子)
 }
 
-let token = encode(&Header::default(), &my_claims, &EncodingKey::from_secret("secret".as_ref()))?;
+struct KeySet {
+    encoding_key: EncodingKey,
+    decoding_key: DecodingKey,
+}
+
+impl JWT {
+    pub fn new(token: String) -> Self {
+        Self(token)
+    }
+
+    pub fn access_token(&self) -> &str {
+        &self.0
+    }
+
+    pub fn create(iss: String, sub: Uuid, aud: String, duration_hours: i64) -> Result<Self, Error> {
+        let iat: DateTime<Utc> = Utc::now();
+        let exp: DateTime<Utc> = iat + Duration::hours(duration_hours);
+        let claims = Claims {
+            iss,
+            sub,
+            aud,
+            exp: exp.timestamp(),
+            iat: iat.timestamp(),
+            jti: Uuid::new_v4(),
+        };
+        let header: Header = Header::new(Algorithm::HS512);
+        let encoding_key = &KEYS.get().ok_or(Error::KeySetFailure)?.encoding_key;
+        let token: String = encode(&header, &claims, encoding_key)
+            .map_err(|e| Error::EncodeError(e.to_string()))?;
+        Ok(JWT(token))
+    }
+
+    pub fn validate(&self, aud: &str) -> Result<Claims, Error> {
+        let decoding_key = &KEYS.get().ok_or(Error::KeySetFailure)?.decoding_key;
+        let mut validation: Validation = Validation::new(Algorithm::HS512);
+        validation.set_audience(&[aud]);
+        let token_data = decode::<Claims>(self.access_token(), &decoding_key, &validation)
+            .map_err(|e| Error::EncodeError(e.to_string()))?;
+
+        Ok(token_data.claims)
+    }
+
+}
+
+pub fn key_init(secret: &[u8]) -> Result<(), Error> {
+    let key_set = KeySet {
+        encoding_key: EncodingKey::from_secret(secret),
+        decoding_key: DecodingKey::from_secret(secret),
+    };
+    
+    KEYS.set(key_set).map_err(|_| Error::KeySetFailure)
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn key_init_test() {
+        let secret = "abcdefg".as_ref();
+        let key_set = key_init(secret);
+       
+        assert!(key_set.is_ok());
+    }
+    // #[test]
+    // fn failed_key_init_test2() {
+    //     let secret = "hijklmn".as_ref();
+    //     let key_set = key_init(secret);
+        
+    //     assert!(key_set.is_err());
+    // }
+
+    #[test]
+    fn jwt_create_test() {
+        let iss = "example@example.com".to_string();
+        let sub = Uuid::new_v4();
+        let aud = "example@example.com/test".to_string();
+        let duration_hours = 2;
+
+        let jwt = JWT::create(iss, sub, aud, duration_hours);
+        match jwt {
+            Ok(_) => println!("Successfully created JWT"),
+            Err(ref e) => eprintln!("AuthError: {}", e),
+        }
+        assert!(jwt.is_ok());
+    }
+
+    #[test]
+    fn validate_test() {
+        let iss = "example@example.com".to_string();
+        let sub = Uuid::new_v4();
+        let aud = "example@example.com/test".to_string();
+        let duration_hours = 2;
+
+        let token = JWT::create(iss.clone(), sub.clone(), aud.clone(), duration_hours)
+            .unwrap()
+            .validate(&aud)
+            .unwrap();
+        
+        assert_eq!(iss, token.iss);
+        assert_eq!(sub, token.sub);
+    }
+
+    #[test]
+    fn should_fail_validate_test() {
+        let iss = "example@example.com".to_string();
+        let sub = Uuid::new_v4();
+        let aud = "example@example.com/test".to_string();
+        let duration_hours = 2;
+        let fail_aud = "example@example.com/fail".to_string();
+    
+        let token = JWT::create(iss.clone(), sub.clone(), aud.clone(), duration_hours)
+            .unwrap()
+            .validate(&fail_aud)
+            ;
+        
+        assert!(token.is_err());
+
+    }
+    
+}
+
+
+
+
+
+

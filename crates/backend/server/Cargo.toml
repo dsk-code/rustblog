@@ -11,4 +11,8 @@ axum = { workspace = true }
 shuttle-axum = { workspace = true }
 shuttle-runtime = { workspace = true }
 shuttle-shared-db = { workspace = true }
+shuttle-secrets = { workspace = true }
 sqlx = { workspace = true, features = ["postgres", "macros"]}
+thiserror = { workspace = true }
+
+auth = { path = "../auth"}
