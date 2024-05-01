@@ -13,4 +13,13 @@ impl DbConnector {
     pub fn get_pool(&self) -> PgPool {
         self.pool.clone()
     }
+
+    pub fn get_secret(&self) -> &str {
+        &self.secret
+    }
+
+    
+
+
+
 }
