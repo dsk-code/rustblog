@@ -11,7 +11,9 @@ async fn hello_world() -> &'static str {
 
 #[shuttle_runtime::main]
 async fn main(
-    #[shuttle_shared_db::Postgres] _pool: PgPool,
+    #[shuttle_shared_db::Postgres(
+        local_uri = "{secrets.DATABASE_URL}"
+    )] _pool: PgPool,
     #[shuttle_runtime::Secrets] secrets: SecretStore,
 ) -> shuttle_axum::ShuttleAxum {
     let router = Router::new().route("/", get(hello_world));

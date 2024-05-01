@@ -1,14 +1,16 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+use sqlx::PgPool;
+
+pub struct DbConnector {
+    pool: PgPool,
+    secret: String,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl DbConnector {
+    pub fn new(pool: PgPool, secret: String) -> Self {
+        Self { pool, secret }
+    }
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    pub fn get_pool(&self) -> PgPool {
+        self.pool.clone()
     }
 }

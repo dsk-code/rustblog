@@ -5,3 +5,11 @@ default_to_workspace = false
 [tasks.sqlx-cli]
 command = "cargo"
 args = ["install", "sqlx-cli", "--no-default-features", "--features", "native-tls,postgres"]
+
+[tasks.sqlx-migrate-add]
+command = "sqlx"
+args = ["migrate", "add", "-r", "--source", "./crates/backend/db/migrations", "${@}"]
+
+[tasks.sqlx-migrate-run]
+command = "sqlx"
+args = ["migrate", "run", "--source", "./crates/backend/db/migrations"]
