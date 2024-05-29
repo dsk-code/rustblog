@@ -13,3 +13,12 @@ args = ["migrate", "add", "-r", "--source", "./crates/backend/db/migrations", "$
 [tasks.sqlx-migrate-run]
 command = "sqlx"
 args = ["migrate", "run", "--source", "./crates/backend/db/migrations"]
+
+# --install_yew
+[tasks.wasm32-unknown-unknown]
+command = "rustup"
+args = ["target", "add", "wasm32-unknown-unknown"]
+
+[tasks.trunk_install]
+command = "cargo"
+args = ["install", "--locked", "trunk"]
