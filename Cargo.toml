@@ -3,7 +3,7 @@ members = [
     "crates/backend/auth", 
     "crates/backend/db",
     "crates/backend/server"
-]
+, "crates/frontend/front"]
 resolver = "2"
 
 [workspace.package]
@@ -12,9 +12,23 @@ edition = "2021"
 rust-version = "1.76"
 
 [workspace.dependencies]
+# frontend
+yew = "0.21.0"
+wasm-bindgen = "0.2.92"
 # backend
 axum = "0.7.5"
-shuttle-axum = "0.42"
-shuttle-runtime = "0.42"
-shuttle-shared-db = {version = "0.42", features = ["sqlx", "postgresql"]}
+shuttle-axum = "0.44"
+shuttle-runtime = "0.44"
+shuttle-shared-db = {version = "0.44", features = ["sqlx", "postgres"]}
+shuttle-secrets = "0.42.0"
 sqlx = {version = "0.7.4", default-features = false}
+jsonwebtoken = "9.3.0"
+serde = {version = "1.0.0", features = ["derive"]}
+uuid = {version = "1.8.0", features = ["v4", "serde"]}
+chrono  = "0.4.37"
+thiserror = "1.0.59"
+anyhow = "1.0.82"
+derive-new = "0.6.0"
+argon2 = "0.5.3"
+password-hash = { version = "0.5.0", features = ["getrandom"]}
+fake = {version = "2.9.2", features = ["derive", "uuid"]}

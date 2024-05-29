@@ -7,3 +7,12 @@ rust-version.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+sqlx = { workspace = true, features = ["runtime-tokio", "postgres", "macros", "migrate", "uuid", "chrono"] }
+thiserror = { workspace = true }
+derive-new = { workspace = true }
+uuid = { workspace = true }
+fake = { workspace = true }
+argon2 = { workspace = true }
+password-hash = { workspace = true }
+# dotenv = "0.15.0"
+# tokio = "1.37.0"
