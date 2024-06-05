@@ -2,8 +2,9 @@
 members = [ 
     "crates/backend/auth", 
     "crates/backend/db",
-    "crates/backend/server"
-, "crates/frontend/front"]
+    "crates/backend/server", 
+    "crates/frontend/front"
+]
 resolver = "2"
 
 [workspace.package]
@@ -13,8 +14,10 @@ rust-version = "1.76"
 
 [workspace.dependencies]
 # frontend
-yew = "0.21.0"
+yew = {version = "0.21.0", features = ["csr"]}
+yew-router = "0.18.0"
 wasm-bindgen = "0.2.92"
+
 # backend
 axum = "0.7.5"
 shuttle-axum = "0.44"
@@ -32,3 +35,4 @@ derive-new = "0.6.0"
 argon2 = "0.5.3"
 password-hash = { version = "0.5.0", features = ["getrandom"]}
 fake = {version = "2.9.2", features = ["derive", "uuid"]}
+

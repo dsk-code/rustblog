@@ -1,0 +1,15 @@
+[build]
+target = "crates/frontend/front/index.html"
+dist = "dist"
+
+[serve]
+port = 8000
+
+[clean]
+dist = "dist"
+cargo = false
+
+[[hooks]]
+stage = "pre_build"
+command = "npm"
+command_arguments = ["run", "build"]

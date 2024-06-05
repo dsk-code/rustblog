@@ -1,7 +1,14 @@
-
+[env]
+WORKSPACE_PATH = { script = ["pwd"] }
 [config]
 default_to_workspace = false
 
+# --frontend
+[tasks.build-yew]
+command = "trunk"
+args = [ "build", "./crates/frontend/front/index.html", "--release", "--dist", "${WORKSPACE_PATH}/dist" ]
+
+# --backend
 [tasks.sqlx-cli]
 command = "cargo"
 args = ["install", "sqlx-cli", "--no-default-features", "--features", "native-tls,postgres"]
@@ -14,7 +21,8 @@ args = ["migrate", "add", "-r", "--source", "./crates/backend/db/migrations", "$
 command = "sqlx"
 args = ["migrate", "run", "--source", "./crates/backend/db/migrations"]
 
-# --install_yew
+# --install
+# -front
 [tasks.wasm32-unknown-unknown]
 command = "rustup"
 args = ["target", "add", "wasm32-unknown-unknown"]
@@ -22,3 +30,16 @@ args = ["target", "add", "wasm32-unknown-unknown"]
 [tasks.trunk_install]
 command = "cargo"
 args = ["install", "--locked", "trunk"]
+
+[tasks.tailwindcss_install]
+command = "npm"
+args = ["install", "-D", "tailwindcss"]
+
+[tasks.tailwindcss_init]
+command = "npx"
+args = ["tailwindcss", "init"]
+
+[tasks.install-wasm]
+command = "cargo"
+args = [ "install", "wasm-bindgen-cli" ]
+
