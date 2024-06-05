@@ -2,8 +2,8 @@
 target = "crates/frontend/front/index.html"
 dist = "dist"
 
-[serve]
-port = 8000
+# [serve]
+# port = 8000
 
 [clean]
 dist = "dist"
