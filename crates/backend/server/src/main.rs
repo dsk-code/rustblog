@@ -4,14 +4,14 @@ use std::sync::Arc;
 use server;
 
 use shuttle_runtime::SecretStore;
-use axum::{routing::get, Router};
+use axum::Router;
 use sqlx::PgPool;
 use anyhow::Context;
 
 
-async fn hello_world() -> &'static str {
-    "Hello, world!"
-}
+// async fn hello_world() -> &'static str {
+//     "Hello, world!"
+// }
 
 #[shuttle_runtime::main]
 async fn main(
@@ -25,7 +25,7 @@ async fn main(
     let state = Arc::new(state);
     
     let app = Router::new()
-        .route("/", get(hello_world))
+        // .route("/", get(hello_world))
         .nest("/auth", server::router::auth::router(state.clone()));
     
     Ok(app.into())
