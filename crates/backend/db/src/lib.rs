@@ -39,4 +39,3 @@ pub async fn init(pool: PgPool, secret: String) -> Result<DbConnector, Error> {
 
     Ok(db)
 }
-

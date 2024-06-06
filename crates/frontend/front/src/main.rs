@@ -1,7 +1,7 @@
-pub mod components;
 pub mod app;
-pub mod test;
+pub mod components;
 mod router;
+pub mod test;
 
 use app::App;
 

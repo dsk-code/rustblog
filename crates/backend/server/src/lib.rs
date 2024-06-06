@@ -10,12 +10,12 @@ use sqlx::PgPool;
 use std::sync::Arc;
 
 pub struct State {
-    db: Arc<DbConnector>
+    db: Arc<DbConnector>,
 }
 
 impl State {
     pub fn new(db: DbConnector) -> Self {
-        Self{ db: Arc::new(db) }
+        Self { db: Arc::new(db) }
     }
 
     pub fn db(&self) -> Arc<DbConnector> {
@@ -23,7 +23,7 @@ impl State {
     }
 }
 
-pub async fn init(secrets: SecretStore, pool: PgPool) -> Result<State, Error>{
+pub async fn init(secrets: SecretStore, pool: PgPool) -> Result<State, Error> {
     let auth_secret = secrets
         .get("AUTH_SECRET")
         .ok_or(Error::NotFoundSecrets("AUTH_SECRET".into()))?;
@@ -34,5 +34,4 @@ pub async fn init(secrets: SecretStore, pool: PgPool) -> Result<State, Error>{
         .ok_or(Error::NotFoundSecrets("DB_SECRET".into()))?;
     let db = State::new(DbConnector::new(pool, db_secret));
     Ok(db)
-
 }

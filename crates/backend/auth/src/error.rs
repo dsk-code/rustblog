@@ -8,5 +8,4 @@ pub enum AuthError {
     EncodeError(String),
     #[error("JWT decoding error: {0}")]
     DecodeError(String),
-
 }

@@ -9,7 +9,12 @@ pub struct VideosListProps {
 }
 
 #[function_component(VideosList)]
-pub fn videos_list(VideosListProps { videos, on_click:onclick }: &VideosListProps) -> Html {
+pub fn videos_list(
+    VideosListProps {
+        videos,
+        on_click: onclick,
+    }: &VideosListProps,
+) -> Html {
     let onclick = onclick.clone();
     videos.iter().map(|video| {
         let on_video_select = {

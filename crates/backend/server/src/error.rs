@@ -1,8 +1,7 @@
 use auth::error;
 
-use thiserror::Error;
 use axum::{http::StatusCode, response::IntoResponse};
-
+use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum Error {
@@ -29,12 +28,13 @@ impl IntoResponse for Error {
             Error::DbError(db::error::Error::DatabaseError(_)) => StatusCode::CONFLICT,
             Error::DbError(db::error::Error::NotFound(_)) => StatusCode::NOT_FOUND,
             Error::DbError(db::error::Error::AlreadyExsited(_)) => StatusCode::CONFLICT,
-            Error::DbError(db::error::Error::MigrationError(_)) => StatusCode::INTERNAL_SERVER_ERROR,
+            Error::DbError(db::error::Error::MigrationError(_)) => {
+                StatusCode::INTERNAL_SERVER_ERROR
+            }
             Error::DbError(db::error::Error::Unknown(_)) => StatusCode::NOT_FOUND,
             _ => StatusCode::NOT_FOUND,
         };
 
         status.into_response()
-
     }
 }

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
-use crate::DbConnector;
 use crate::error::Error;
+use crate::DbConnector;
 
 use derive_new::new;
 use uuid::Uuid;
@@ -58,7 +58,6 @@ impl UserRepository {
         Ok(())
     }
 }
-
 
 // #[cfg(test)]
 // pub mod tests_utils {
@@ -121,7 +120,7 @@ impl UserRepository {
 //         )
 //         .execute(&pool)
 //         .await?;
-        
+
 //         Ok(id)
 //     }
 
@@ -133,10 +132,4 @@ impl UserRepository {
 //         println!("user = {}", user);
 //     }
 
-
-
-
-
-
-    
 // }

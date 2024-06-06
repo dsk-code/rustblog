@@ -1,13 +1,11 @@
 pub mod error;
-use  error::AuthError as Error;
+use error::AuthError as Error;
 
-use jsonwebtoken::{
-    decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation
-};
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
-use chrono::{Duration, Utc, DateTime};
+use chrono::{DateTime, Duration, Utc};
+use jsonwebtoken::{decode, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
+use serde::{Deserialize, Serialize};
 use std::sync::OnceLock;
+use uuid::Uuid;
 
 static KEYS: OnceLock<KeySet> = OnceLock::new();
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Clone)]
@@ -16,11 +14,11 @@ pub struct JWT(String);
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Claims {
     iss: String, // issuer (JWTの発行者)
-    sub: Uuid, // subject (ユーザーの識別子)
+    sub: Uuid,   // subject (ユーザーの識別子)
     aud: String, // audience (JWTの受信者)
-    exp: i64, // expiration time (有効期限)
-    iat: i64, // Issued At (発行日時)
-    jti: Uuid, // JWT ID (JWTの一意な識別子)
+    exp: i64,    // expiration time (有効期限)
+    iat: i64,    // Issued At (発行日時)
+    jti: Uuid,   // JWT ID (JWTの一意な識別子)
 }
 
 struct KeySet {
@@ -67,7 +65,6 @@ impl JWT {
 
         Ok(token_data.claims)
     }
-
 }
 
 /// Initialize the key
@@ -76,7 +73,7 @@ pub fn key_init(secret: &[u8]) -> Result<(), Error> {
         encoding_key: EncodingKey::from_secret(secret),
         decoding_key: DecodingKey::from_secret(secret),
     };
-    
+
     KEYS.set(key_set).map_err(|_| Error::KeySetFailure)
 }
 
@@ -88,14 +85,14 @@ pub fn key_init(secret: &[u8]) -> Result<(), Error> {
 //     // fn key_init_test() {
 //     //     let secret = "abcdefg".as_ref();
 //     //     let key_set = key_init(secret);
-       
+
 //     //     assert!(key_set.is_ok());
 //     // }
 //     // #[test]
 //     // fn failed_key_init_test2() {
 //     //     let secret = "hijklmn".as_ref();
 //     //     let key_set = key_init(secret);
-        
+
 //     //     assert!(key_set.is_err());
 //     // }
 
@@ -128,7 +125,7 @@ pub fn key_init(secret: &[u8]) -> Result<(), Error> {
 //     //         .unwrap()
 //     //         .validate(&aud)
 //     //         .unwrap();
-        
+
 //     //     assert_eq!(iss, token.iss);
 //     //     assert_eq!(sub, token.sub);
 //     // }
@@ -140,20 +137,14 @@ pub fn key_init(secret: &[u8]) -> Result<(), Error> {
 //     //     let aud = "example@example.com/test".to_string();
 //     //     let duration_hours = 2;
 //     //     let fail_aud = "example@example.com/fail".to_string();
-    
+
 //     //     let token = JWT::create(iss.clone(), sub.clone(), aud.clone(), duration_hours)
 //     //         .unwrap()
 //     //         .validate(&fail_aud)
 //     //         ;
-        
+
 //     //     assert!(token.is_err());
 
 //     // }
-    
+
 // }
-
-
-
-
-
-

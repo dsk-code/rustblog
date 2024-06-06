@@ -1,10 +1,10 @@
-use serde::Deserialize;
-use gloo_net::http::Request;
-use yew::prelude::*;
 use crate::components::{VideoDetails, VideosList};
+use gloo_net::http::Request;
+use serde::Deserialize;
+use yew::prelude::*;
 // use webpage::{WebpageOptions, Webpage};
 
-#[derive(Clone, PartialEq ,Deserialize)]
+#[derive(Clone, PartialEq, Deserialize)]
 pub struct Video {
     pub id: usize,
     pub title: String,
@@ -46,7 +46,7 @@ pub fn test() -> Html {
             });
             || ()
         });
-    }   
+    }
 
     // let videos = vec![
     //     Video {
@@ -78,13 +78,13 @@ pub fn test() -> Html {
 
     let on_video_select = {
         let selected_video = selected_video.clone();
-        Callback::from(move |video: Video| {
-            selected_video.set(Some(video))
-        })
+        Callback::from(move |video: Video| selected_video.set(Some(video)))
     };
 
-    let details = selected_video.as_ref().map(|video| html! {
-        <VideoDetails video={video.clone()} />
+    let details = selected_video.as_ref().map(|video| {
+        html! {
+            <VideoDetails video={video.clone()} />
+        }
     });
 
     // let image_url = image("https://www.rust-lang.org");
@@ -104,5 +104,4 @@ pub fn test() -> Html {
     // html! {
     //     <p>{"hello world!"}</p>
     // }
-}   
-
+}
