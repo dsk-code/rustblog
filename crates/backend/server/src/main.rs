@@ -26,6 +26,7 @@ async fn main(
     
     let app = Router::new()
         // .route("/", get(hello_world))
+        .merge(server::router::static_file::static_roouter())
         .nest("/auth", server::router::auth::router(state.clone()));
     
     Ok(app.into())

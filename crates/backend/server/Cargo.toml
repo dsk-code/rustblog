@@ -19,6 +19,7 @@ serde = { workspace = true }
 argon2 = { workspace = true }
 password-hash = { workspace = true }
 uuid = { workspace = true }
+tower-http = { workspace = true }
 
 auth = { path = "../auth"}
 db = { path = "../db/"}

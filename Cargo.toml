@@ -35,4 +35,4 @@ derive-new = "0.6.0"
 argon2 = "0.5.3"
 password-hash = { version = "0.5.0", features = ["getrandom"]}
 fake = {version = "2.9.2", features = ["derive", "uuid"]}
-
+tower-http = {version = "0.5.2", features = ["fs"]}
