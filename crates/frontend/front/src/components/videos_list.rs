@@ -1,4 +1,4 @@
-use crate::test::Video;
+use crate::pages::test::Video;
 
 use yew::prelude::*;
 

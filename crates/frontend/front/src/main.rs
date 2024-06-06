@@ -1,7 +1,7 @@
 pub mod app;
 pub mod components;
 mod router;
-pub mod test;
+pub mod pages;
 
 use app::App;
 

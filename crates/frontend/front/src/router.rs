@@ -1,4 +1,7 @@
-use crate::test::Test;
+use crate::pages::{
+    test::Test,
+    home::Home,
+};
 
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -17,8 +20,7 @@ pub fn switch(routers: Route) -> Html {
     match routers {
         Route::Home => html! {
             <>
-                <h1>{ "Home" }</h1>
-                <Link<Route> to={Route::Signup}>{ "Go Signup" }</Link<Route>>
+                <Home />     
             </>
         },
         Route::Signup => html! {
