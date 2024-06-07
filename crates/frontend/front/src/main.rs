@@ -1,7 +1,8 @@
-pub mod app;
+mod app;
 pub mod components;
 mod router;
-pub mod pages;
+mod pages;
+mod structs;
 
 use app::App;
 

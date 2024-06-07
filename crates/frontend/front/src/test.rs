@@ -1,15 +1,10 @@
-use crate::components::{VideoDetails, VideosList};
-use crate::router::Route;
-use crate::components::common::navbar::NavigationBar;
-
-use gloo_net::http::Request;
 use serde::Deserialize;
+use gloo_net::http::Request;
 use yew::prelude::*;
-use yew_router::prelude::*;
-
+use crate::components::{VideoDetails, VideosList};
 // use webpage::{WebpageOptions, Webpage};
 
-#[derive(Clone, PartialEq, Deserialize)]
+#[derive(Clone, PartialEq ,Deserialize)]
 pub struct Video {
     pub id: usize,
     pub title: String,
@@ -31,7 +26,6 @@ pub struct Video {
 //     log::info!("Image URL: {}", image_url);
 //     image_url
 // }
-const TAB: &str = "text-base border-4 rounded-lg border-gray-800 p-1";
 
 #[function_component(Test)]
 pub fn test() -> Html {
@@ -52,7 +46,7 @@ pub fn test() -> Html {
             });
             || ()
         });
-    }
+    }   
 
     // let videos = vec![
     //     Video {
@@ -84,20 +78,19 @@ pub fn test() -> Html {
 
     let on_video_select = {
         let selected_video = selected_video.clone();
-        Callback::from(move |video: Video| selected_video.set(Some(video)))
+        Callback::from(move |video: Video| {
+            selected_video.set(Some(video))
+        })
     };
 
-    let details = selected_video.as_ref().map(|video| {
-        html! {
-            <VideoDetails video={video.clone()} />
-        }
+    let details = selected_video.as_ref().map(|video| html! {
+        <VideoDetails video={video.clone()} />
     });
 
     // let image_url = image("https://www.rust-lang.org");
 
     html! {
         <>
-            <NavigationBar />
             <h1>{ "RustConf Explorer" }</h1>
             <div>
                 <h3>{"Videos to watch"}</h3>
@@ -105,13 +98,11 @@ pub fn test() -> Html {
                 <VideosList videos={(*videos).clone()} on_click={on_video_select.clone()} />
             </div>
             { for details }
-            <div>
-                <Link<Route> to={Route::Home} classes={classes!(TAB)}>{ "Go Home" }</Link<Route>>
-            </div>
             // <img src={image_url}/>
         </>
     }
     // html! {
     //     <p>{"hello world!"}</p>
     // }
-}
+}   
+

@@ -1,4 +1,5 @@
 use crate::router::{switch, Route};
+
 use yew::prelude::*;
 use yew_router::{BrowserRouter, Switch};
 
